@@ -1,0 +1,28 @@
+{
+  "name": "@kumbaya/load-testing",
+  "version": "1.0.0",
+  "description": "Load testing suite for Kumbaya DEX on MegaETH - tests RPC and sequencer infrastructure",
+  "type": "module",
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:rpc": "vitest run --testNamePattern='RPC'",
+    "test:tx": "vitest run --testNamePattern='Transaction'",
+    "test:load:rpc": "vitest run src/load-tests/rpc-load.test.ts",
+    "test:load:tx": "vitest run src/load-tests/tx-load.test.ts",
+    "test:load:frontend": "vitest run src/load-tests/frontend-patterns.test.ts",
+    "load:quotes": "tsx src/scripts/load-quotes.ts",
+    "load:pool-reads": "tsx src/scripts/load-pool-reads.ts",
+    "load:swaps": "tsx src/scripts/load-swaps.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "viem": "^2.21.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.6.0",
+    "vitest": "^2.1.0"
+  }
+}
