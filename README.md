@@ -6,7 +6,7 @@ Comprehensive load testing suite for Kumbaya DEX on MegaETH. This suite tests bo
 
 This test suite is designed to stress-test MegaETH infrastructure to ensure optimal performance for the Kumbaya DEX. Tests are **intentionally designed without rate limiting or backoff** - failures indicate infrastructure issues that need to be addressed.
 
-**45 tests** across 4 test files covering RPC reads, load testing, transaction encoding, and frontend patterns.
+**60 tests** across 5 test files covering RPC reads, load testing, transaction encoding, frontend patterns, and LP positions.
 
 ## Quick Start
 
@@ -22,6 +22,7 @@ pnpm test:rpc           # Basic RPC read operations
 pnpm test:load:rpc      # RPC load tests
 pnpm test:load:tx       # Transaction simulation tests
 pnpm test:load:frontend # Frontend pattern tests
+pnpm test:load:lp       # LP position tests
 ```
 
 ## Test Categories
@@ -71,6 +72,28 @@ Tests simulating actual frontend RPC patterns:
 | 5 concurrent sessions | Concurrent frontend session simulation |
 | 20 concurrent multicalls | High concurrency multicall stress test |
 | 50 mixed multicalls | Mixed quote + pool state requests |
+
+### 5. LP Position Tests (`src/load-tests/lp-positions.test.ts`) - 15 tests
+
+Tests for liquidity position management:
+
+| Test | Description |
+|------|-------------|
+| Position count | `balanceOf` for NFT positions |
+| Position enumeration | `tokenOfOwnerByIndex` loop |
+| Batch position enumeration | Multicall3 batched tokenId lookup |
+| Position details | `positions(tokenId)` full data |
+| Batch position details | 10 positions in single multicall |
+| TickLens single word | `getPopulatedTicksInWord` for liquidity chart |
+| TickLens batch | 5 tick bitmap words batched |
+| Token metadata | name, symbol, decimals |
+| Batch token metadata | 2 tokens × 3 fields via multicall |
+| Allowance check | Single spender allowance |
+| Batch allowances | 3 spenders (SwapRouter, NFT PM, Universal Router) |
+| ETH balance | `getEthBalance` via Multicall |
+| Batch balances | ETH + 2 token balances |
+| LP page simulation | Full frontend LP page load pattern |
+| 10 concurrent LP loads | Parallel LP page sessions |
 
 ## Load Generation Scripts
 
@@ -163,6 +186,11 @@ npx tsx src/scripts/load-swaps.ts \
 | `quoteExactOutputSingle(...)` | QuoterV2 | Reverse quote |
 | `balanceOf(address)` | ERC20/NFT | Token balance |
 | `positions(uint256)` | NFT PM | Position details |
+| `tokenOfOwnerByIndex(address,uint256)` | NFT PM | Enumerate positions |
+| `name()`, `symbol()`, `decimals()` | ERC20 | Token metadata |
+| `allowance(owner,spender)` | ERC20 | Approval check |
+| `getPopulatedTicksInWord(pool,index)` | TickLens | Liquidity visualization |
+| `getEthBalance(address)` | Multicall | ETH balance |
 | `aggregate(...)` | Multicall | Batch calls |
 | `tryAggregate(bool,Call[])` | Multicall3 | Batch calls (frontend pattern) |
 
@@ -232,7 +260,8 @@ load-testing/
 │   ├── load-tests/
 │   │   ├── rpc-load.test.ts      # RPC stress tests (10 tests)
 │   │   ├── tx-load.test.ts       # Transaction encoding tests (20 tests)
-│   │   └── frontend-patterns.test.ts  # Frontend Multicall3 patterns (10 tests)
+│   │   ├── frontend-patterns.test.ts  # Frontend Multicall3 patterns (10 tests)
+│   │   └── lp-positions.test.ts  # LP position tests (15 tests)
 │   └── scripts/
 │       ├── load-quotes.ts        # Quote load generator
 │       ├── load-pool-reads.ts    # Pool read generator

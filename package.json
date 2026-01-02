@@ -11,6 +11,7 @@
     "test:load:rpc": "vitest run src/load-tests/rpc-load.test.ts",
     "test:load:tx": "vitest run src/load-tests/tx-load.test.ts",
     "test:load:frontend": "vitest run src/load-tests/frontend-patterns.test.ts",
+    "test:load:lp": "vitest run src/load-tests/lp-positions.test.ts",
     "load:quotes": "tsx src/scripts/load-quotes.ts",
     "load:pool-reads": "tsx src/scripts/load-pool-reads.ts",
     "load:swaps": "tsx src/scripts/load-swaps.ts",
