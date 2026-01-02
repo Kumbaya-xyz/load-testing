@@ -18,41 +18,11 @@ import {
   UNISWAP_V3_POOL_ABI,
   UNISWAP_V3_FACTORY_ABI,
   QUOTER_V2_ABI,
+  MULTICALL3_ABI,
 } from '../abis/index.js';
 import type { PublicClient, Address } from 'viem';
 import { parseEther, encodeFunctionData, getAddress, keccak256, concat, encodeAbiParameters } from 'viem';
 import { createMetrics, recordSuccess, recordError, printMetricsSummary } from '../utils/client.js';
-
-// Multicall3 ABI - using tryAggregate (view function, same as frontend)
-// This matches the frontend pattern in state/multicall/updater.tsx
-const MULTICALL3_ABI = [
-  {
-    inputs: [
-      { name: 'requireSuccess', type: 'bool' },
-      {
-        components: [
-          { name: 'target', type: 'address' },
-          { name: 'callData', type: 'bytes' },
-        ],
-        name: 'calls',
-        type: 'tuple[]',
-      },
-    ],
-    name: 'tryAggregate',
-    outputs: [
-      {
-        components: [
-          { name: 'success', type: 'bool' },
-          { name: 'returnData', type: 'bytes' },
-        ],
-        name: 'returnData',
-        type: 'tuple[]',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-] as const;
 
 // Helper type for tryAggregate calls
 type MulticallCall = { target: Address; callData: `0x${string}` };

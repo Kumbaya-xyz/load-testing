@@ -451,3 +451,33 @@ export const TICK_LENS_ABI = [
     type: 'function',
   },
 ] as const;
+
+// Multicall3 at canonical address 0xcA11bde05977b3631167028862bE2a173976CA11
+export const MULTICALL3_ABI = [
+  {
+    inputs: [
+      { name: 'requireSuccess', type: 'bool' },
+      {
+        components: [
+          { name: 'target', type: 'address' },
+          { name: 'callData', type: 'bytes' },
+        ],
+        name: 'calls',
+        type: 'tuple[]',
+      },
+    ],
+    name: 'tryAggregate',
+    outputs: [
+      {
+        components: [
+          { name: 'success', type: 'bool' },
+          { name: 'returnData', type: 'bytes' },
+        ],
+        name: 'returnData',
+        type: 'tuple[]',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+] as const;

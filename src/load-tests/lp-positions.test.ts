@@ -18,39 +18,10 @@ import {
   TICK_LENS_ABI,
   UNISWAP_V3_POOL_ABI,
   MULTICALL_ABI,
+  MULTICALL3_ABI,
 } from '../abis/index.js';
 import type { PublicClient, Address } from 'viem';
 import { encodeFunctionData } from 'viem';
-
-// Multicall3 ABI for tryAggregate (same as frontend uses)
-const MULTICALL3_ABI = [
-  {
-    inputs: [
-      { name: 'requireSuccess', type: 'bool' },
-      {
-        components: [
-          { name: 'target', type: 'address' },
-          { name: 'callData', type: 'bytes' },
-        ],
-        name: 'calls',
-        type: 'tuple[]',
-      },
-    ],
-    name: 'tryAggregate',
-    outputs: [
-      {
-        components: [
-          { name: 'success', type: 'bool' },
-          { name: 'returnData', type: 'bytes' },
-        ],
-        name: 'returnData',
-        type: 'tuple[]',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-] as const;
 
 type MulticallCall = { target: Address; callData: `0x${string}` };
 
